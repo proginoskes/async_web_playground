@@ -1,8 +1,6 @@
 //use std::thread::JoinHandle;
 
 
-use std::time::SystemTime;
-
 use axum::{
     routing::get,
     //Extension,
@@ -12,23 +10,16 @@ use hyper::{Body, Request};
 use tower_http::trace::TraceLayer;
 use tower::ServiceBuilder;
 use tracing::Span;
+use chrono::prelude::Utc;
 
 use tokio::signal;
 
 fn log_request ( request : &Request<Body>, _span : &Span){
     println!("......");
-    println!("{:} {:} | {:?}", 
+    println!("{:} {:} || {:?}", 
             request.method(),
             request.uri(),
-            match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-                Ok(time) => {
-                    match time.as_secs() {
-                        t if t>=1672549200 => "2023",
-                        _ =>"pre-2023"
-                    }
-                },
-                Err(_)=>"0"
-            }
+            Utc::now() 
         );
 }
 
